@@ -1,7 +1,9 @@
 @extends('layouts.master')
 
 @section('content')
+    @csrf
     <form method="POST" action="{{ url('/validerFrais') }}">
+        <input type="hidden" name="id" value="{{$frais->id_frais}}">
         {{csrf_field()}}
 
         <h1>Ajout Fiche de frais</h1>
@@ -15,12 +17,12 @@
             <div class="form-group">
                 <label class="col-md-3">Montant saisi</label>
                 <div class="col-md-6">
-                    <input type="number" name="total" class="form-control " min="0" step="0.01" value="" disabled>
+                    <input type="number" name="total" class="form-control " min="0" step="0.01" value="{{$frais->montantSaisi}}" disabled>
                 </div>
                 <h1></h1>
                 <div class="col-md-12 col-md-offset-3">
-                    <a href=" " class="btn btn-info disabled">Frais hors forfait </a>
-                    <a href=" " class="btn btn-info disabled">Frais au forfait</a>
+                    <a href=" " class="btn btn-info @if (!$frais -> id_frais) disabled @endif" >Frais hors forfait </a>
+                    <a href=" " class="btn btn-info @if (!$frais -> id_frais) disabled @endif" >Frais au forfait</a>
                 </div>
             </div>
             <div class="form-group">
@@ -32,7 +34,7 @@
             <div class="form-group">
                 <label class="col-md-3">Montant validé</label>
                 <div class="col-md-6">
-                    <input type="number" name="valide" class="form-control" min="0" step="0.01" value="{{$frais->montantvalider}}">
+                    <input type="number" name="valide" class="form-control" min="0" step="0.01" value="{{$frais->montantvalide}}">
                 </div>
             </div>
             <div class="form-group">

@@ -14,11 +14,15 @@ class FraisController extends Controller
 }
 
 public function addFrais(){
-    return view('formFrais');
+    $frais = new Frais();
+    $frais->anneemois=date("T-m");
+
+    return view('formFrais',compact('frais') );
 }
 
 public function validFrais(Request $request){
     $frais=new Frais();
+    $id_frais=$request->input('id');
     $frais->id_visiteur =session('id_visiteur');
     $frais->anneemois= $request->input('mois');
     $frais->nbjustificatifs= $request->input('nbjustif');
@@ -26,9 +30,23 @@ public function validFrais(Request $request){
     $frais->id_etat=$request->input('etat');
     $frais->datemodification =date("Y-m-d");
 
+
     $service = new FraisService();
     $service->saveFrais($frais);
     return redirect(url('/listerFrais'));
 }
+public function saveFrais($frais){
+    $frais->save();
+}
+public function editFrais($id){
+    $service = new FraisService();
+    $frais =$service->getFrais($id);
+    return view('editFrais',compact('frais'));
+}
+public function getFrais($id){
+    $frais= Frais::query()->find($id);
+    return $frais;
+}
+
 
 }

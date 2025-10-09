@@ -20,7 +20,7 @@
             <td>{{$frais->nbjustificatifs}}</td>
             <td>{{$frais->montantvalide}}</td>
             <td>{{$frais->id_etat}}</td>
-            <td>{{$frais->datemodification}}</td>
+            <td><a href="formFrais.blade.php" > modifier </a></td>
         </tr>
         @endforeach
 
