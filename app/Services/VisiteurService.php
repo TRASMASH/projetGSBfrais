@@ -12,14 +12,17 @@ class VisiteurService
 
     public function signIn($login, $pwd)
     {
+        try {
+            $visiteur = Visiteur::query()->where('login_visiteur', '=', $login)->first();
 
-        $visiteur = Visiteur::query()->where('login_visiteur', '=', $login)->first();
-        if ($visiteur && $visiteur->pwd_visiteur == $pwd) {
-            Session::put('id_visiteur', $visiteur->id_visiteur);
-            Session::put('visiteur' , "$visiteur->prenom_visiteur $visiteur->nom_visiteur");
-            return true;
-        }
+            //if ($visiteur && $visiteur->pwd_visiteur == $pwd) {
+            if ($visiteur && password_verify($pwd, $visiteur->pwd_visiteur)) {
+                Session::put('id_visiteur', $visiteur->id_visiteur);
+                Session::put('visiteur', "$visiteur->prenom_visiteur $visiteur->nom_visiteur");
+                return true;
+            }}catch (\Exception $e){
         return false;
+        }
     }
 
 
