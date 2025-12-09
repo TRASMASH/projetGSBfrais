@@ -47,6 +47,15 @@ public function getFrais($id){
     $frais= Frais::query()->find($id);
     return $frais;
 }
-
+public function getFraisAPI($idFrais){
+  try{
+      $service = new FraisService();
+      $frais =$service->getFrais($idFrais);
+      return json_encode($frais);
+  }catch(Exception $e){
+      $erreur=$e->getMessage();
+      return reponse()->json(['erreur'=>$erreur],500);
+  }
+}
 
 }

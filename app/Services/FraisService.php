@@ -18,5 +18,7 @@ class FraisService{
 
         $frais->save();
     }
+
+
 }
 
