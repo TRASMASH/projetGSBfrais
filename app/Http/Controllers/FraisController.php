@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Models\Frais;
 use Illuminate\Http\Request;
 use App\Services\FraisService;
+use Illuminate\Support\Facades\Auth;
 
 class FraisController extends Controller
 { public function listFrais()
@@ -57,5 +58,67 @@ public function getFraisAPI($idFrais){
       return reponse()->json(['erreur'=>$erreur],500);
   }
 }
+    public function addFraisAPI(Request $request)
+    {
+
+
+
+
+
+        $frais = new Frais();
+        $frais->anneemois = $request->json('anneemois');
+        $frais->id_visiteur = $request->json('id_visiteur');
+        $frais->nbjustificatifs = $request->json('nbjustificatifs');
+        $frais->datemodification = date("Y-m-d");
+        $frais->montantvalide = 0;
+        $frais->id_etat = 1;
+
+        $service = new FraisService();
+        $service->saveFrais($frais);
+
+        return response()->json([
+            "message" => "Insertion réalisée",
+            "id_frais" => $frais->id_frais
+        ]);
+    }
+
+        public function updateFraisAPI(Request $request) {
+            $service = new FraisService();
+            $idFrais = $request->input('id_frais');
+            $frais = $service->getFrais($idFrais);
+
+
+
+
+
+
+            if($request->has('anneemois')) $frais->anneemois = $request->json('anneemois');
+            if($request->has('nbjustificatifs')) $frais->nbjustificatifs = $request->json('nbjustificatifs');
+            if($request->has('montantvalide')) $frais->montantvalide = $request->json('montantvalide');
+            if($request->has('id_etat')) $frais->id_etat = $request->json('id_etat');
+
+            $frais->datemodification = date("Y-m-d");
+
+            $service->saveFrais($frais);
+
+            return response()->json([
+                "message" => "Modification réalisée",
+                "id_frais" => $frais->id_frais
+            ]);
+        }
+    public function removeFraisAPI(Request $request) {
+        $service = new FraisService();
+        $idFrais = $request->input('id_frais');
+        $frais = $service->getFrais($idFrais);
+
+        $service->deleteFrais($idFrais);
+
+        return response()->json([
+            "message" => "Suppression réalisée",
+            "id_frais" => $idFrais
+        ]);
+    }
+
+
 
 }

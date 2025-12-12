@@ -19,6 +19,10 @@ class FraisService{
         $frais->save();
     }
 
+    public function getFrais($id){
+        return Frais::find($id);
+    }
+
 
 }
 
