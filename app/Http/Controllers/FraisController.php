@@ -119,6 +119,16 @@ public function getFraisAPI($idFrais){
         ]);
     }
 
+    public function listFraisAPI($idVisiteur) {
+
+
+
+
+        $service = new FraisService();
+        $liste = $service->getListFrais($idVisiteur);
+
+        return response()->json($liste);
+    }
 
 
 }

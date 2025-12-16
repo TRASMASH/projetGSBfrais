@@ -17,3 +17,4 @@ Route::get('/frais/{idFrais}',[FraisController::class,'getFraisAPI'])->middlewar
 Route::post('/frais/ajout', [FraisController::class, 'addFraisAPI']);
 Route::post('/frais/modif', [FraisController::class, 'updateFraisAPI']);
 Route::delete('/frais/suppr', [FraisController::class, 'removeFraisAPI']);
+Route::get('/frais/liste/{idVisiteur}', [FraisController::class, 'listFraisAPI']);

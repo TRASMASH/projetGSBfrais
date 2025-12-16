@@ -23,6 +23,9 @@ class FraisService{
         return Frais::find($id);
     }
 
-
+ public  function deleteFrais($id){
+        $frais = Frais::find($id);
+        $frais->delete();
+ }
 }
 
