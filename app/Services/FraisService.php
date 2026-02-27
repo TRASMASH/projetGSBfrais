@@ -40,5 +40,14 @@ class FraisService{
             throw new UserException($userMessage,$exception->getMessage(),$exception->getCode());
         }
     }
+
+    public function getFrais($id){
+        return Frais::find($id);
+    }
+
+ public  function deleteFrais($id){
+        $frais = Frais::find($id);
+        $frais->delete();
+ }
 }
 
