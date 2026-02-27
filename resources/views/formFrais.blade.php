@@ -17,12 +17,12 @@
             <div class="form-group">
                 <label class="col-md-3">Montant saisi</label>
                 <div class="col-md-6">
-                    <input type="number" name="total" class="form-control " min="0" step="0.01" value="{{$frais->montantSaisi}}" disabled>
+                    <input type="number" name="total" class="form-control " min="0" step="0.01" value="{{$frais->montantSaisi}}" >
                 </div>
                 <h1></h1>
                 <div class="col-md-12 col-md-offset-3">
-                    <a href=" " class="btn btn-info @if (!$frais -> id_frais) disabled @endif" >Frais hors forfait </a>
-                    <a href=" " class="btn btn-info @if (!$frais -> id_frais) disabled @endif" >Frais au forfait</a>
+                    <a href=" " class="btn btn-info" @if (!$frais -> id_frais) disabled @endif >Frais hors forfait </a>
+                    <a href=" " class="btn btn-info" @if (!$frais -> id_frais) disabled @endif >Frais au forfait</a>
                 </div>
             </div>
             <div class="form-group">
@@ -47,7 +47,8 @@
             <hr>
             <div class="form-group">
                 <div class="col-md-12 col-md-offset-3">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary"
+                            onclick="if (confirm('Validez-vous la saisi')) window.location='{{url('/')}}';">
                         Valider
                     </button>
                     <button type="button" class="btn btn-secondary"

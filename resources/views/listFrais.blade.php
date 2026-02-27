@@ -20,7 +20,7 @@
             <td>{{$frais->nbjustificatifs}}</td>
             <td>{{$frais->montantvalide}}</td>
             <td>{{$frais->id_etat}}</td>
-            <td><a href="formFrais.blade.php" > modifier </a></td>
+            <td><a href="{{url('/editerFrais/'.$frais->id_frais)}}"> modifier </a></td>
         </tr>
         @endforeach
 

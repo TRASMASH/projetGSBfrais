@@ -6,23 +6,38 @@ use App\Services\FraisService;
 
 class FraisController extends Controller
 { public function listFrais()
-{
+{try{
     $service = new FraisService();
     $id_visiteur= session('id_visiteur');
     $fiches=$service->getListFrais($id_visiteur);
     return view('listFrais',compact('fiches'));
+}catch (Exception $exception){
+    return view('error',compact('exception'));
+}
 }
 
 public function addFrais(){
-    $frais = new Frais();
-    $frais->anneemois=date("T-m");
+    try {
+        $frais = new Frais();
+        $frais->anneemois = date("T-m");
 
-    return view('formFrais',compact('frais') );
+        return view('formFrais', compact('frais'));
+    }catch (\Exception $exception){
+        return view('error',compact('exception'));
+    }
 }
 
 public function validFrais(Request $request){
-    $frais=new Frais();
+    try{
+    $service = new FraisService();
     $id_frais=$request->input('id');
+    if ($id_frais){
+        $frais = $service-> getFrais($id_frais);
+
+    }else {
+        $frais=new Frais();
+
+    }
     $frais->id_visiteur =session('id_visiteur');
     $frais->anneemois= $request->input('mois');
     $frais->nbjustificatifs= $request->input('nbjustif');
@@ -30,23 +45,23 @@ public function validFrais(Request $request){
     $frais->id_etat=$request->input('etat');
     $frais->datemodification =date("Y-m-d");
 
-
-    $service = new FraisService();
     $service->saveFrais($frais);
-    return redirect(url('/listerFrais'));
+    return redirect('listerFrais');
+    }catch (Exception $exception){
+        return view('error',compact('exception'));
+    }
+
 }
-public function saveFrais($frais){
-    $frais->save();
-}
-public function editFrais($id){
+
+public function editFrais($id){try {
     $service = new FraisService();
-    $frais =$service->getFrais($id);
-    return view('editFrais',compact('frais'));
+    $frais = $service->getFrais($id);
+    return view('formFrais', compact('frais'));
+}catch (Exception $exception){
+    return view('error',compact('exception'));
 }
-public function getFrais($id){
-    $frais= Frais::query()->find($id);
-    return $frais;
 }
+
 
 
 }
