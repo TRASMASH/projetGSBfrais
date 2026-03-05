@@ -29,6 +29,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/ajouterFrais') }}">Ajouter</a>
                     </li>
+                    <li> <a class="nav-link" href="{{ url('/rechercheRapport.blade.php') }}">Rechercher</a> </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">

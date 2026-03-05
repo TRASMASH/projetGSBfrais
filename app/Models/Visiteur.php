@@ -9,6 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Visiteur extends Authenticatable{
 
+
     protected $table = 'visiteur';
     protected $primaryKey = 'id_visiteur';
     public $timestamps = false;
