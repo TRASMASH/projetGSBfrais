@@ -56,7 +56,7 @@ class RapportController extends Controller
     public function saveRapport(Request $request)
     {
         try {
-            $id_visiteur = session('id_visiteur'); // VARCHAR dans ta base
+            $id_visiteur = session('id_visiteur'); // VARCHAR dans la base
 
             $id_rapport = $request->input('id_rapport');
 
@@ -71,7 +71,7 @@ class RapportController extends Controller
                         'motif'        => $request->motif,
                     ]);
             } else {
-                // AJOUT
+                // ajout
                 DB::table('rapport_visite')->insert([
                     'id_visiteur'  => $id_visiteur,
                     'id_praticien' => $request->id_praticien,
@@ -143,6 +143,62 @@ class RapportController extends Controller
 
         return redirect('/editRapport/'.$request->id_rapport);
     }
+    public function listerRapport(Request $request)
+    {
+        try {
+            $query = DB::table('rapport_visite')
+                ->join('praticien', 'rapport_visite.id_praticien', '=', 'praticien.id_praticien')
+                ->select(
+                    'rapport_visite.*',
+                    'praticien.nom_praticien',
+                    'praticien.prenom_praticien'
+                );
+
+            // Recherche par nom praticien
+            if ($request->filled('nom')) {
+                $query->where('praticien.nom_praticien', 'like', '%' . $request->nom . '%');
+            }
+
+            // Recherche par date
+            if ($request->filled('date')) {
+                $query->where('rapport_visite.date_rapport', '=', $request->date);
+            }
+
+            $fiches = $query->get();
+
+            return view('listerRapport', compact('fiches'));
+
+        } catch (\Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+    public function ajouterOffert($id_rapport)
+    {
+        try {
+            $medicaments = DB::table('medicament')->get();
+
+            return view('formAjouterOffert', compact('id_rapport', 'medicaments'));
+
+        } catch (\Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+    public function saveOffert(Request $request)
+    {
+        try {
+            DB::table('offrir')->insert([
+                'id_rapport'   => $request->id_rapport,
+                'id_medicament'=> $request->id_medicament,
+                'qte_offerte'  => $request->qte_offerte
+            ]);
+
+            return redirect('/editRapport/'.$request->id_rapport);
+
+        } catch (\Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+
 
 
 }

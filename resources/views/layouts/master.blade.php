@@ -30,7 +30,7 @@
                         <a class="nav-link" href="{{ url('/ajouterFrais') }}">Ajouter</a>
                     </li>
                     <li><a class="nav-link" href="{{url('listerRapport')}}"> liste des rapport</a> </li>
-                    <li> <a class="nav-link" href="{{ url('/rechercherRapport') }}">Rechercher</a> </li>
+
                     <li><a class="nav-link" href="{{url('/ajouterRapport')}}">Ajouter un rapport </a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/topMedicaments') }}">Top Médicaments</a>

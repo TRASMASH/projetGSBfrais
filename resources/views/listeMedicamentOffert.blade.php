@@ -37,6 +37,10 @@
         @endforeach
         </tbody>
     </table>
+    <a class="btn btn-success mb-3" href="{{ url('/ajouterOffert/'.$rapport->id_rapport) }}">
+        Ajouter un médicament
+    </a>
+
 
 @endsection
 

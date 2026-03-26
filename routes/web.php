@@ -36,3 +36,8 @@ Route::get('/editRapport/{id}', [RapportController::class, 'editRapport']);
 Route::get('/modifierOffert/{id_rapport}/{id_medicament}', [RapportController::class, 'modifierOffert']);
 Route::get('/supprimerOffert/{id_rapport}/{id_medicament}', [RapportController::class, 'supprimerOffert']);
 Route::post('/saveModifierOffert', [RapportController::class, 'saveModifierOffert']);
+
+Route::get('/listerRapport', [RapportController::class, 'listerRapport']);
+Route::get('/ajouterOffert/{id_rapport}', [RapportController::class, 'ajouterOffert']);
+Route::post('/saveOffert', [RapportController::class, 'saveOffert']);
+

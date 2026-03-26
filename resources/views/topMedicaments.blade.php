@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <h1>Top 10 des médicaments les plus offerts</h1>
+    <h1>Le top des médicaments les plus offerts</h1>
 
     <table class="table table-bordered table-striped">
         <thead>
