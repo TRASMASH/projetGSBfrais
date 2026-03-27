@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\FraisService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -193,6 +194,27 @@ class RapportController extends Controller
             ]);
 
             return redirect('/editRapport/'.$request->id_rapport);
+
+        } catch (\Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+    public function listRapportAPI(Request $request)
+    {
+        try {
+            $query = DB::table('rapport_visite')
+                ->join('praticien', 'rapport_visite.id_praticien', '=', 'praticien.id_praticien')
+                ->select(
+                    'rapport_visite.*',
+                    'praticien.nom_praticien',
+                    'praticien.prenom_praticien'
+                );
+
+
+
+            $fiches = $query->get();
+
+           return JSON_encode($fiches);
 
         } catch (\Exception $exception) {
             return view('error', compact('exception'));

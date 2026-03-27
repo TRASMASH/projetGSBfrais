@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FraisController;
+use App\Http\Controllers\RapportController;
 use App\Http\Controllers\VisiteurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +19,4 @@ Route::post('/frais/ajout', [FraisController::class, 'addFraisAPI']);
 Route::post('/frais/modif', [FraisController::class, 'updateFraisAPI']);
 Route::delete('/frais/suppr', [FraisController::class, 'removeFraisAPI']);
 Route::get('/frais/liste/{idVisiteur}', [FraisController::class, 'listFraisAPI']);
+Route::get('/rapport/liste', [RapportController::class, 'listRapportAPI']);
