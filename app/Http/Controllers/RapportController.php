@@ -9,7 +9,7 @@ use Exception;
 
 class RapportController extends Controller
 {
-    // LISTE DES RAPPORTS
+
     public function listRapport()
     {
         try {
@@ -57,7 +57,7 @@ class RapportController extends Controller
     public function saveRapport(Request $request)
     {
         try {
-            $id_visiteur = session('id_visiteur'); // VARCHAR dans la base
+            $id_visiteur = session('id_visiteur');
 
             $id_rapport = $request->input('id_rapport');
 
@@ -155,12 +155,12 @@ class RapportController extends Controller
                     'praticien.prenom_praticien'
                 );
 
-            // Recherche par nom praticien
+            // Recherche par nom praticien test
             if ($request->filled('nom')) {
                 $query->where('praticien.nom_praticien', 'like', '%' . $request->nom . '%');
             }
 
-            // Recherche par date
+            // Recherche par date2.0 test
             if ($request->filled('date')) {
                 $query->where('rapport_visite.date_rapport', '=', $request->date);
             }
@@ -199,6 +199,7 @@ class RapportController extends Controller
             return view('error', compact('exception'));
         }
     }
+
     public function listRapportAPI(Request $request)
     {
         try {
@@ -210,17 +211,69 @@ class RapportController extends Controller
                     'praticien.prenom_praticien'
                 );
 
-
-
             $fiches = $query->get();
 
-           return JSON_encode($fiches);
+            return response()->json($fiches, 200);
 
         } catch (\Exception $exception) {
-            return view('error', compact('exception'));
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des rapports',
+                'error' => $exception->getMessage()
+            ], 500);
         }
     }
 
+    public function storeRapportAPI(Request $request)
+    {
+        try {
+            $visiteur = auth('sanctum')->user();
 
+            if (!$visiteur) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Utilisateur non authentifié'
+                ], 401);
+            }
+
+            $id_visiteur = $visiteur->id_visiteur;
+
+            DB::table('rapport_visite')->insert([
+                'id_visiteur'  => $id_visiteur,
+                'id_praticien' => $request->input('id_praticien'),
+                'date_rapport' => $request->input('date_rapport'),
+                'motif'        => $request->input('motif'),
+                'bilan'        => $request->input('bilan')
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Rapport ajouté avec succès'
+            ], 201);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'ajout du rapport',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    public function addRapportAPI()
+    {
+        try {
+            $praticiens = DB::table('praticien')->orderBy('nom_praticien')->get();
+
+            return response()->json([
+                'praticiens' => $praticiens
+            ], 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des praticiens',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
 
 }
