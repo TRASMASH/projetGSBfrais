@@ -276,4 +276,154 @@ class RapportController extends Controller
         }
     }
 
+    public function getMedicamentsOffertsAPI($id_rapport)
+    {
+        try {
+            $rapport = DB::table('rapport_visite')
+                ->where('id_rapport', $id_rapport)
+                ->first();
+
+            if (!$rapport) {
+                return response()->json(['error' => 'Rapport non trouvé'], 404);
+            }
+
+            $offerts = DB::table('offrir')
+                ->join('medicament', 'offrir.id_medicament', '=', 'medicament.id_medicament')
+                ->select(
+                    'offrir.id_rapport',
+                    'offrir.id_medicament',
+                    'medicament.nom_commercial',
+                    'offrir.qte_offerte'
+                )
+                ->where('offrir.id_rapport', $id_rapport)
+                ->get();
+
+            return response()->json([
+                'rapport' => $rapport,
+                'offerts' => $offerts
+            ], 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des médicaments',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateOffertAPI(Request $request)
+    {
+        try {
+            DB::table('offrir')
+                ->where('id_rapport', $request->id_rapport)
+                ->where('id_medicament', $request->id_medicament)
+                ->update([
+                    'qte_offerte' => $request->qte_offerte
+                ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Quantité modifiée avec succès'
+            ], 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la modification',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    public function addOffertAPI(Request $request)
+    {
+        try {
+            DB::table('offrir')->insert([
+                'id_rapport' => $request->id_rapport,
+                'id_medicament' => $request->id_medicament,
+                'qte_offerte' => $request->qte_offerte
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Médicament ajouté avec succès'
+            ], 201);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de l\'ajout',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteOffertAPI(Request $request)
+    {
+        try {
+            DB::table('offrir')
+                ->where('id_rapport', $request->id_rapport)
+                ->where('id_medicament', $request->id_medicament)
+                ->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Médicament supprimé avec succès'
+            ], 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la suppression',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getMedicamentsAPI()
+    {
+        try {
+            $medicaments = DB::table('medicament')->get();
+
+            return response()->json($medicaments, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des médicaments',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    public function listerRapportAPI(Request $request)
+    {
+        try {
+            $query = DB::table('rapport_visite')
+                ->join('praticien', 'rapport_visite.id_praticien', '=', 'praticien.id_praticien')
+                ->select(
+                    'rapport_visite.*',
+                    'praticien.nom_praticien',
+                    'praticien.prenom_praticien'
+                );
+
+            // Recherche par nom praticien
+            if ($request->filled('nom')) {
+                $query->where('praticien.nom_praticien', 'like', '%' . $request->nom . '%');
+            }
+
+            // Recherche par date
+            if ($request->filled('date')) {
+                $query->where('rapport_visite.date_rapport', '=', $request->date);
+            }
+
+            $fiches = $query->get();
+
+            return response()->json($fiches, 200);
+
+        } catch (\Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des rapports',
+                'error' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
 }

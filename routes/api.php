@@ -29,4 +29,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/rapport/ajout', [RapportController::class, 'storeRapportAPI']);
 
     Route::get('/medicament/liste', [MédocController::class, 'topMedicamentsAPI']);
+
+    Route::get('/rapport/{id_rapport}/medicaments', [RapportController::class, 'getMedicamentsOffertsAPI']);
+    Route::post('/rapport/modifier-offert', [RapportController::class, 'updateOffertAPI']);
+    Route::post('/rapport/ajouter-offert', [RapportController::class, 'addOffertAPI']);
+    Route::delete('/rapport/supprimer-offert', [RapportController::class, 'deleteOffertAPI']);
+    Route::get('/medicaments', [RapportController::class, 'getMedicamentsAPI']);
+
+    Route::get('/rapport/lister', [RapportController::class, 'listerRapportAPI'])->middleware('auth:sanctum');
 });
