@@ -41,3 +41,10 @@ Route::get('/listerRapport', [RapportController::class, 'listerRapport']);
 Route::get('/ajouterOffert/{id_rapport}', [RapportController::class, 'ajouterOffert']);
 Route::post('/saveOffert', [RapportController::class, 'saveOffert']);
 
+Route::get('/topMedicaments',  [MédocController::class, 'topMedicaments']);
+
+
+
+Route::get('/listeMedoc',      [MédocController::class, 'listeMedoc']);
+Route::post('/rapportParMedoc', [MédocController::class, 'rapportParMedoc']);
+

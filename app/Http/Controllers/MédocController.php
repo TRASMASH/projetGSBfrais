@@ -2,12 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\FraisService;
+use App\Services\MedicamentService;
+use App\Services\RapportService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
 class MédocController extends Controller
 {
+    protected MedicamentService $medicamentService;
+    protected RapportService    $rapportService;
+
+    public function __construct(MedicamentService $medicamentService, RapportService $rapportService)
+    {
+        $this->medicamentService = $medicamentService;
+        $this->rapportService    = $rapportService;
+    }
+
+
 
     public function topMedicaments()
     {
@@ -29,6 +41,7 @@ class MédocController extends Controller
             return view('error', compact('exception'));
         }
     }
+
     public function topMedicamentsAPI()
     {
         try {
@@ -44,13 +57,47 @@ class MédocController extends Controller
                 ->get();
 
             return response()->json($medicaments, 200);
+
         } catch (Exception $exception) {
             return response()->json([
                 'success' => false,
                 'message' => 'Erreur lors de la récupération des médicaments',
-                'error' => $exception->getMessage()
+                'error'   => $exception->getMessage()
             ], 500);
         }
     }
-}
 
+
+    public function listeMedoc()
+    {
+        try {
+            $medicaments = $this->medicamentService->getAllMedicaments();
+            return view('ListeMédoc', compact('medicaments'));
+
+        } catch (\Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+
+
+    public function rapportParMedoc(Request $request)
+    {
+        try {
+            $idMedicament = $request->input('id_medicament');
+
+            $medicaments = $this->medicamentService->getAllMedicaments();
+            $rapports    = collect();
+            $medocChoisi = null;
+
+            if ($idMedicament) {
+                $rapports    = $this->rapportService->getRapportsByMedicament((int) $idMedicament);
+                $medocChoisi = $medicaments->firstWhere('id_medicament', (int) $idMedicament);
+            }
+
+            return view('RapportListe', compact('medicaments', 'rapports', 'medocChoisi', 'idMedicament'));
+
+        } catch (\Exception $exception) {
+            return view('error', compact('exception'));
+        }
+    }
+}

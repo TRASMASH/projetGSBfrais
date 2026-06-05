@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/topMedicaments') }}">Top Médicaments</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/listeMedoc') }}">Liste Médicaments</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
